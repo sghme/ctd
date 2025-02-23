@@ -27,7 +27,12 @@
             width: 100%;
             padding: 15px;
         }
-        input, button {
+        input {
+            width: 100%;
+            max-width: 250px;
+            text-align: center;
+            display: block;
+            margin: 0 auto 10px;
             padding: 10px;
             font-size: clamp(12px, 2vw, 16px);
             border-radius: 5px;
@@ -35,14 +40,21 @@
             background: black;
             color: #00ff00;
             font-family: 'Press Start 2P', cursive;
-            width: 90%;
-            max-width: 280px;
-            margin-top: 10px;
-            text-align: center;
         }
         button {
+            width: 150px;
+            padding: 10px;
+            font-size: clamp(12px, 2vw, 16px);
+            border-radius: 5px;
+            border: 2px solid #00ff00;
+            background: black;
+            color: #00ff00;
+            font-family: 'Press Start 2P', cursive;
             cursor: pointer;
             transition: transform 0.2s;
+            text-align: center;
+            display: block;
+            margin: 10px auto;
         }
         button:hover {
             transform: scale(1.1);
@@ -109,14 +121,23 @@
             max-width: 80%;
             height: auto;
         }
+        .wav-message {
+            font-size: clamp(14px, 2.5vw, 18px);
+            margin-top: 20px;
+            color: #ff69b4;
+            animation: fadeIn 2s ease-in-out;
+            text-align: justify;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
     <div class="container" id="mainContainer">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="name" placeholder="Your Name"> <br>
-        <label for="code">Enter Code:</label>
-        <input type="text" id="code" placeholder="Enter Code"> <br>
+        <input type="text" id="name" placeholder="Enter your name">
+        <input type="text" id="code" placeholder="Enter code">
         <button onclick="showGreeting()">Go</button>
         <div class="greeting hidden" id="greeting"></div>
         <button id="nextButton" class="hidden" onclick="showNext()">Next</button>
@@ -126,6 +147,7 @@
     <div id="nextMessage" class="hidden message-container">
         <p id="message" class="typing-message"></p>
         <img src="sponge_leg.gif" id="gif" class="hidden" width="300">
+        <p id="wavMessage" class="wav-message hidden"> wav,navi😘</p>
     </div>
 
     <script>
@@ -133,7 +155,7 @@
             const name = document.getElementById("name").value;
             const code = document.getElementById("code").value;
             
-            if (name && code === "wav u") {
+            if (name && code === "i am your nemesis") {
                 document.getElementById("mainContainer").innerHTML = `
                     <h1 class="greeting" id="birthdayText">Happy Birthday, ${name}!</h1>
                     <img src="spongebob.png" id="birthdayImage" width="250">
@@ -158,16 +180,14 @@
         }
 
         function showNext() {
-            // Hide birthday text and image
             document.getElementById("birthdayText").style.display = "none";
             document.getElementById("birthdayImage").style.display = "none";
             document.getElementById("nextButton").style.display = "none";
 
-            // Show the message container
             document.getElementById("nextMessage").classList.remove("hidden");
 
             const messageElement = document.getElementById("message");
-            const message = "May you always choose to be excited to celebrate your day, as it marks a new chapter of your life. Do what makes you happy, and don't skip leg day!!";
+            const message = "May you always choose to be excited to celebrate your day, as it marks a new chapter of your life. Do what makes you happy, and don't skip leg day!";
             let i = 0;
             function typeMessage() {
                 if (i < message.length) {
@@ -176,6 +196,9 @@
                     setTimeout(typeMessage, 50);
                 } else {
                     document.getElementById("gif").classList.remove("hidden");
+                    setTimeout(() => {
+                        document.getElementById("wavMessage").classList.remove("hidden");
+                    }, 1500);
                 }
             }
             typeMessage();
