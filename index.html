@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Birthday Greeting</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            background-color: black;
+            color: #00ff00;
+            margin: 0;
+            padding: 10px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        .container, .message-container {
+            max-width: 90vw;
+            width: 100%;
+            padding: 15px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: clamp(12px, 2vw, 16px);
+            border-radius: 5px;
+            border: 2px solid #00ff00;
+            background: black;
+            color: #00ff00;
+            font-family: 'Press Start 2P', cursive;
+            width: 90%;
+            max-width: 280px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        button {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.1);
+            background: #00ff00;
+            color: black;
+        }
+        .greeting {
+            font-size: clamp(18px, 4vw, 24px);
+            margin-top: 20px;
+        }
+        .balloons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .balloon {
+            position: absolute;
+            width: clamp(15px, 3vw, 20px);
+            height: clamp(25px, 4vw, 30px);
+            background: #ff0000;
+            border-radius: 50%;
+            animation: float 5s infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh); opacity: 1; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+        .hidden {
+            display: none;
+        }
+        .message-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: justify;
+            max-width: 80vw;
+            margin: 0 auto;
+        }
+        .typing-message {
+            white-space: normal;
+            overflow: hidden;
+            border-right: 2px solid #00ff00;
+            font-size: clamp(14px, 2.5vw, 18px);
+            max-width: 80vw;
+            animation: typingMessage 3s steps(40, end) forwards, blink 0.75s step-end infinite;
+        }
+        @keyframes typingMessage {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: #00ff00; }
+        }
+        img {
+            max-width: 80%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <h2>Enter Your Name:</h2>
+        <input type="text" id="name" placeholder="Your Name">
+        <h2>Enter Code:</h2>
+        <input type="text" id="code" placeholder="Enter Code">
+        <button onclick="showGreeting()">Go</button>
+        <div class="greeting hidden" id="greeting"></div>
+        <button id="nextButton" class="hidden" onclick="showNext()">Next</button>
+    </div>
+    <div class="balloons"></div>
+    
+    <div id="nextMessage" class="hidden message-container">
+        <p id="message" class="typing-message"></p>
+        <img src="sponge_leg.gif" id="gif" class="hidden" width="300">
+    </div>
+
+    <script>
+        function showGreeting() {
+            const name = document.getElementById("name").value;
+            const code = document.getElementById("code").value;
+            
+            if (name && code === "wav u") {
+                document.getElementById("mainContainer").innerHTML = `
+                    <h1 class="greeting" id="birthdayText">Happy Birthday, ${name}!</h1>
+                    <img src="spongebob.png" id="birthdayImage" width="250">
+                    <br>
+                    <button id="nextButton" onclick="showNext()">Next</button>
+                `;
+                generateBalloons();
+            } else {
+                alert("Invalid name or code! Please try again.");
+            }
+        }
+
+        function generateBalloons() {
+            const balloonContainer = document.querySelector(".balloons");
+            for (let i = 0; i < 20; i++) {
+                let balloon = document.createElement("div");
+                balloon.classList.add("balloon");
+                balloon.style.left = Math.random() * 100 + "vw";
+                balloon.style.animationDuration = (Math.random() * 3 + 2) + "s";
+                balloonContainer.appendChild(balloon);
+            }
+        }
+
+        function showNext() {
+            // Hide birthday text and image
+            document.getElementById("birthdayText").style.display = "none";
+            document.getElementById("birthdayImage").style.display = "none";
+            document.getElementById("nextButton").style.display = "none";
+
+            // Show the message container
+            document.getElementById("nextMessage").classList.remove("hidden");
+
+            const messageElement = document.getElementById("message");
+            const message = "May you always choose to live your life. Do things that make you happy and don't forget to do a leg day!";
+            let i = 0;
+            function typeMessage() {
+                if (i < message.length) {
+                    messageElement.textContent += message.charAt(i);
+                    i++;
+                    setTimeout(typeMessage, 50);
+                } else {
+                    document.getElementById("gif").classList.remove("hidden");
+                }
+            }
+            typeMessage();
+        }
+    </script>
+</body>
+</html>
